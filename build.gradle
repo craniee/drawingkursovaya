@@ -1,0 +1,78 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.openjfx:javafx-controls:21'
+    implementation 'org.openjfx:javafx-fxml:21'
+    implementation 'org.openjfx:javafx-graphics:21'
+    implementation 'org.openjfx:javafx-base:21'
+    implementation 'org.openjfx:javafx-swing:21'
+
+    implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
+    implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
+}
+
+application {
+    mainClass = 'org.example.Main'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'org.example.Main',
+                'Multi-Release': 'true'
+        )
+    }
+
+    // Собираем fat jar, включая все зависимости
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // Исключаем файлы, которые могут вызвать конфликты
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    exclude 'META-INF/services/**'
+    exclude 'module-info.class'
+}
+
+// Конфигурация Javadoc (оставляем как есть)
+javadoc {
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    options.addBooleanOption('Xdoclint:none', true)
+    options.addBooleanOption('html5', true)
+}
+
+// Простая задача для генерации Javadoc
+task docs {
+    group = 'documentation'
+    description = 'Генерирует Javadoc'
+    dependsOn javadoc
+
+    doLast {
+        println "Javadoc создан: build/docs/javadoc/index.html"
+    }
+}
+
+// Задача для сборки
+task buildApp {
+    group = 'build'
+    description = 'Собирает проект'
+    dependsOn clean, jar
+
+    doLast {
+        println "Сборка завершена!"
+        println "JAR файл: build/libs/drawingkursovaya-1.0-SNAPSHOT.jar"
+    }
+}

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <!-- Установка кодировки по умолчанию для всего логгера -->
+    <Properties>
+        <Property name="defaultEncoding">UTF-8</Property>
+        <Property name="logPattern">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- Консольный вывод с UTF-8 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${logPattern}" charset="UTF-8"/>
+        </Console>
+
+        <!-- Файловый вывод с UTF-8 -->
+        <File name="File" fileName="logs/app.log" append="true">
+            <PatternLayout pattern="${logPattern}" charset="UTF-8"/>
+        </File>
+
+        <!-- Дополнительный файловый аппендер с ротацией по дате -->
+        <RollingFile name="RollingFile" fileName="logs/app.log"
+                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="${logPattern}" charset="UTF-8"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- Логгер для вашего приложения с уровнем DEBUG для детальной отладки -->
+        <Logger name="org.example" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+
+        <!-- Корневой логгер -->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

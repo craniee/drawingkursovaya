@@ -1,0 +1,22 @@
+# Gradle
+.gradle/
+build/
+
+# Explicitly include Gradle Wrapper JAR (required!)
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# Logs and temporary files
+logs/
+*.log
+tmp/
+temp/
+
+# OS generated
+.DS_Store
+Thumbs.db
