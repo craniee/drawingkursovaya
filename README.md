@@ -18,6 +18,7 @@
 
 ## Запуск через консоль
 ```bash
+./gradlew run
 .\run.bat
 
 ## Запуск javadoc
